@@ -5,8 +5,10 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res, next) => {
   try {
+    console.log("req.body", req.body);
     const { email } = req.body;
     const foundUser = await userModel.findOne({ email });
+    console.log("foundUser", foundUser);
     if (foundUser) {
       res.status(400).json({ message: "email already exists" });
     } else {
@@ -29,6 +31,20 @@ userRouter.put("/updatecart/:userID", async (req, res, next) => {
     console.log(req.body);
     let user = await userModel.findById(req.params.userID);
     user.cart = req.body;
+    await user.save();
+    console.log(user);
+    res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.put("/updateprofile/:userID", async (req, res, next) => {
+  try {
+    console.log("updating profile address");
+    let user = await userModel.findById(req.params.userID);
+    user.address = req.body;
+    user.deliveryAddress = req.body;
     await user.save();
     console.log(user);
     res.status(200).send(user);

@@ -24,10 +24,10 @@ const UserSchema = new Schema(
       required: true,
     },
     address: {
-      type: String,
+      type: Object,
     },
     deliveryAddress: {
-      type: String,
+      type: Object,
     },
     phoneNumber: {
       type: String,

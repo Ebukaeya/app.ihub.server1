@@ -1,7 +1,11 @@
 import express from "express";
 import userModel from "../models/userModel.js";
+import { generateToken, verifyToken } from "../auth/token.js";
+import { authenticateUserMiddleware } from "../auth/token.js";
+import { cloudUpload } from "../tools/uploadImage.js";
 
 const userRouter = express.Router();
+
 
 userRouter.post("/signup", async (req, res, next) => {
   try {
@@ -19,7 +23,9 @@ userRouter.post("/signup", async (req, res, next) => {
       };
       const newUser = new userModel(userMod);
       const user = await newUser.save();
-      res.json(user);
+      let { _id } = user.toObject();
+      const token = await generateToken({ id: _id });
+      res.status(201).send({ ...user.toObject(), token });
     }
   } catch (error) {
     console.log(error);
@@ -51,6 +57,16 @@ userRouter.put("/updateprofile/:userID", async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+
+
+userRouter.put("/uploadImage", authenticateUserMiddleware, cloudUpload, (req, res, next) => {
+try {
+  console.log(req.file);
+} catch (error) {
+  console.log(error);
+}
 });
 
 export default userRouter;

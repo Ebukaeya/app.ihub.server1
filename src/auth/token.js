@@ -44,6 +44,7 @@ export const authenticateUserMiddleware = async (req, res, next) => {
       }
     } catch (error) {
       console.log(error);
+      res.status(401).json({ message: "token expired" });
     }
   } else {
     res.status(401).json({ message: "provide a token" });

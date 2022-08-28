@@ -45,7 +45,7 @@ userRouter.put("/updatecart/:userID", async (req, res, next) => {
   }
 });
 
-userRouter.put("/updateprofile/:userID", async (req, res, next) => {
+userRouter.put("/updateprofileAddress/:userID", async (req, res, next) => {
   try {
     console.log("updating profile address");
     let user = await userModel.findById(req.params.userID);
@@ -59,13 +59,33 @@ userRouter.put("/updateprofile/:userID", async (req, res, next) => {
   }
 });
 
-
-
-userRouter.put("/uploadImage", authenticateUserMiddleware, cloudUpload, (req, res, next) => {
+userRouter.put("/updateprofile", authenticateUserMiddleware, async(req,res, next)=>{
 try {
-  console.log(req.file);
+  let user = req.user;
+  user.gender= req.body.gender;
+  user.dateOfBirth= req.body.dateOfBirth;
+  await user.save();
+  res.status(200).send(user);
+
+  
 } catch (error) {
   console.log(error);
+}
+})
+
+
+userRouter.put("/uploadImage", authenticateUserMiddleware, cloudUpload, async(req, res, next) => {
+try {
+  console.log("req.file", req.file);
+     let image =req.file.path;
+     let user = req.user;
+      user.imageUrl = image;
+      await user.save();
+      res.status(200).send(user);
+
+} catch (error) {
+  console.log(error);
+  
 }
 });
 

@@ -43,6 +43,9 @@ const UserSchema = new Schema(
     chatId: {
       type: Schema.ObjectId,
     },
+    dateOfBirth: {
+      type: String,
+    },
 
     cart:{
         type: Object

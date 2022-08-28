@@ -10,7 +10,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-console.log(process.env.CLOUDINARY_NAME);
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -21,10 +20,5 @@ const storage = new CloudinaryStorage({
 });
 
 export const cloudUpload = multer({
-  storage: new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-      folder: "Ihub-text-images",
-    },
-  }),
+  storage: storage,
 }).single("image");

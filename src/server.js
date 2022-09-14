@@ -21,6 +21,10 @@ app.use("/users", userRouter);
 
 const port = process.env.PORT || 5001;
 
+app.get("/", (req,res)=>{
+    console.log("am here")
+    res.send("hello")
+})
 
 
 

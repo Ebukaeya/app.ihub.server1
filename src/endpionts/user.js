@@ -25,6 +25,7 @@ userRouter.post("/signup", async (req, res, next) => {
       const user = await newUser.save();
       let { _id } = user.toObject();
       const token = await generateToken({ id: _id });
+      console.log("token", token);
       res.status(201).send({ ...user.toObject(), token });
     }
   } catch (error) {

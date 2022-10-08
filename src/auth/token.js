@@ -40,7 +40,7 @@ export const authenticateUserMiddleware = async (req, res, next) => {
         console.log("am entered")
         next();
       } else {
-        res.status(401).json({ message: "Invalid token" });
+        res.status(404).json({ message: "Invalid token" });
       }
     } catch (error) {
       console.log(error);

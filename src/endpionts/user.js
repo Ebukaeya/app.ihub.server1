@@ -49,9 +49,11 @@ userRouter.put("/updatecart/:userID", async (req, res, next) => {
 userRouter.put("/updateprofileAddress/:userID", async (req, res, next) => {
   try {
     console.log("updating profile address");
+    let { address, phoneNumber } = req.body;
     let user = await userModel.findById(req.params.userID);
-    user.address = req.body;
-    user.deliveryAddress = req.body;
+    user.address = address;
+    user.deliveryAddress = address;
+    user.phoneNumber = phoneNumber;
     await user.save();
     console.log(user);
     res.status(200).send(user);

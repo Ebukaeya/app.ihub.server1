@@ -3,6 +3,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 import listEndpoints from "express-list-endpoints";
 import userRouter from "./endpionts/user.js";
+import webstoreRouter from "./endpionts/webstore.js";
+import chatRouter from "./endpionts/chats.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { socketConnection } from "./socketconnections/index.js";
 
 const app = express();
 app.use(express.json());
@@ -10,6 +15,8 @@ app.use(cors({ origin: "*" }));
 
 /* routes */
 app.use("/consumers", userRouter);
+app.use("/webstore", webstoreRouter)
+app.use("/chats", chatRouter)  /* must be tokenized */
 
 /* errorhandlers */
 
@@ -24,6 +31,17 @@ const options = {
   DB_NAME: process.env.MONGO_CONSUMER_DB,
 };
 
+/* socket connections */
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*",
+    },
+});
+
+socketConnection(io);
+
 
 
 try {
@@ -31,7 +49,7 @@ try {
         console.log("connected to mongo");
       
         try {
-          app.listen(port, options, () => {
+            httpServer.listen(port, options, () => {
             console.log(`listening on port ${port}`);
             console.table(listEndpoints(app));
           });
@@ -42,3 +60,6 @@ try {
 } catch (error) {
     console.log("mongo connection failed", error);
 }
+
+
+/* create a new socket */

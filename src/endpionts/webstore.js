@@ -47,4 +47,16 @@ webstoreRouter.post("/chat", async (req, res, next) => {
   }
 });
 
+
+/* endpoint that creates a new my order when consumer makes purchases */
+
+webstoreRouter.post("/createMyorders", async (req, res, next) => {
+  try {
+    console.log("req.body", req.body);
+    
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export default webstoreRouter;

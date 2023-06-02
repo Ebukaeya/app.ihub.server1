@@ -1,5 +1,7 @@
 import express from "express";
 import userModel from "../models/userModel.js";
+import myOrderModel from "../models/myOrder.js";
+import mongoose from "mongoose";
 
 const webstoreRouter = express.Router();
 
@@ -47,13 +49,33 @@ webstoreRouter.post("/chat", async (req, res, next) => {
   }
 });
 
-
 /* endpoint that creates a new my order when consumer makes purchases */
 
 webstoreRouter.post("/createMyorders", async (req, res, next) => {
   try {
-    console.log("req.body", req.body);
-    
+    let { paymentID, purchasedItems, shippingAddress, paymentMethod, pickUpInStore, totalbreakDown, totalPaid, profile } = req.body;
+    /*  console.log("req.body", req.body); */
+   
+    let newOrder = new myOrderModel({
+      orderDate: Date.now(),
+      paymentID,
+      purchasedItems,
+      shippingAddress,
+      paymentMethod,
+      pickUpInStore,
+      totalBreakDown: {
+        totalItems: purchasedItems.length,
+        subTotal: totalbreakDown.subtotal,
+        deliveryFee: totalbreakDown.deliveryFee,
+        totalPaid,
+        orderStatus: "pending",
+      },
+      consumerID: mongoose.Types.ObjectId(profile._id),
+    });
+
+    console.log(newOrder);
+    await newOrder.save();
+   res.status(200).send({message:"order created successfully",newOrder})
   } catch (error) {
     console.log(error);
   }

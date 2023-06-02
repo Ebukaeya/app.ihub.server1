@@ -4,7 +4,7 @@ import pkg from "mongoose";
 
 const { Schema, model, ObjectId } = pkg;
 
-const OrdersSchema = new Schema({});
+
 
 const CartSchema = new Schema({});
 
@@ -59,7 +59,7 @@ const UserSchema = new Schema(
     gender: {
       type: String,
     },
-    orders: [OrdersSchema],
+    myOrders: [{ type: ObjectId, ref: "MyOrders" }],
 
     conversations: [ConversationSchema],
     dateOfBirth: {

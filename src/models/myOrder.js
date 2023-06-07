@@ -6,6 +6,7 @@ const { Schema, model, ObjectId } = pkg;
 
 
 export const OrdersSchema = new Schema({
+     consumerOrderID: { type: String, unique: true },
      orderDate: { type: Date }, 
      paymentID: { type: String },
      purchasedItems:[{}],

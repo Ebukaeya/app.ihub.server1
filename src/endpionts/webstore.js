@@ -72,6 +72,7 @@ webstoreRouter.post("/createMyorders", async (req, res, next) => {
         orderStatus: "pending",
       },
       consumerID: mongoose.Types.ObjectId(profile._id),
+      orderStatus: "pending",
     });
 
     console.log(newOrder);
@@ -83,37 +84,56 @@ webstoreRouter.post("/createMyorders", async (req, res, next) => {
 });
 
 webstoreRouter.patch("/UpdateCOnsumerOrder", async (req, res, next) => {
-  let { consumerOrderID, productID, deliveryStatus } = req.body; /* productID is an array */
+  let { consumerOrderID, productID, deliveryStatus,disputeReason, disputeRaisedDate,disputeResolvedDate } = req.body; /* productID is an array */
+
   console.log("req.body", req.body);
 
   try {
     let consumerOrders = await myOrderModel.findOne({ consumerOrderID });
     if (consumerOrders) {
-      let updatedPurchasedItems = consumerOrders.purchasedItems.map((item) => {
+   /*    let updatedPurchasedItems = consumerOrders.purchasedItems.map((item) => {
       for (let i = 0; i < productID.length; i++) {
         if (item._id.toString() === productID[i].toString()) {
           console.log("item found");
           item.deliveryStatus = deliveryStatus;
+          item.unit = "mastercase";
         }
       }
       return item;
+      }); */
+
+      consumerOrders.purchasedItems.forEach((item,i,arr) => {
+        for (let i = 0; i < productID.length; i++) {
+          if (item._id.toString() === productID[i].toString()) {
+            console.log("item found",arr);
+            
+            let updateDProduct = {...item,deliveryStatus:deliveryStatus, disputeReason, disputeRaisedDate,disputeResolvedDate};
+            arr[i] = updateDProduct;
+            
+          }
+        }
       });
 
-      console.log("updatedPurchasedItems", updatedPurchasedItems);
-      consumerOrders.purchasedItems = updatedPurchasedItems;
+      console.log("updatenewcheckdPurchasedItems", consumerOrders.purchasedItems);
+     /*  consumerOrders.purchasedItems = [...updatedPurchasedItems]; */
+
       /* checking if all orders are shipped or delivered */
       let isAllOrderShipped = consumerOrders.purchasedItems.every((item) => item.deliveryStatus === "shipped");
-      let isAllOrderDelivered = consumerOrders.purchasedItems.every((item) => item.deliveryStatus === "delivered");
+      let isAllOrderDelivered = consumerOrders.purchasedItems.every((item) => item.deliveryStatus === "delivered" || item.deliveryStatus === "resolved");
       if (isAllOrderShipped) {
+        console.log("all orders are shipped");
         consumerOrders.orderStatus = "shipped";
       }
       if (isAllOrderDelivered) {
+        console.log("all orders are delivered");
         consumerOrders.orderStatus = "delivered";
       }
 
-       await consumerOrders.save();
-        console.log("consumerOrders", consumerOrders);
-      res.status(200).send({ message: "order updated successfully", consumerOrders });
+    let savedOrder = await consumerOrders.save();
+       /*  console.log("consumerOrders", consumerOrders,saved); */
+      res.status(200).send({ message: "order updated successfully", savedOrder });
+
+
     }
   } catch (error) {
     console.log(error);

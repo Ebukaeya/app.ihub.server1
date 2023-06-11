@@ -9,7 +9,7 @@ export const OrdersSchema = new Schema({
      consumerOrderID: { type: String, unique: true },
      orderDate: { type: Date }, 
      paymentID: { type: String },
-     purchasedItems:[{}],
+     purchasedItems:{type: Array, default: [] },
      shippingAddress: { type: String },
      paymentMethod: { type: String },
      pickUpInStore: { type: Boolean },
@@ -22,7 +22,7 @@ export const OrdersSchema = new Schema({
      },
      orderStatus: { type: String, enum: ["pending", "processing", "shipped", "delivered", "dispute","resolved"] },
      disputeReason: { type: String } || null /* only if orderStatus is dispute */,
-     consumerID: { type: ObjectId, ref: "User" },
+     consumerID: { type: ObjectId, ref: "User", index: true },
 
 });
 

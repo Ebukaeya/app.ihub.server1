@@ -8,6 +8,7 @@ import chatRouter from "./endpionts/chats.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { socketConnection } from "./socketconnections/index.js";
+import myOrdersRouter from "./endpionts/myorders/myOrdersHandler.js";
 
 const app = express();
 app.use(express.json());
@@ -15,8 +16,9 @@ app.use(cors({ origin: "*" }));
 
 /* routes */
 app.use("/consumers", userRouter);
-app.use("/webstore", webstoreRouter)
+app.use("/webstore", webstoreRouter) /* uses a hard coded encryption token */
 app.use("/chats", chatRouter)  /* must be tokenized */
+app.use("/myorders", myOrdersRouter) /* must be tokenized */
 
 /* errorhandlers */
 

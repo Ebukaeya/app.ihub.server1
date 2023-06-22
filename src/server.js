@@ -9,6 +9,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { socketConnection } from "./socketconnections/index.js";
 import myOrdersRouter from "./endpionts/myorders/myOrdersHandler.js";
+import cartRouter from "./endpionts/cart/cartManipulation.js";
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ app.use("/consumers", userRouter);
 app.use("/webstore", webstoreRouter) /* uses a hard coded encryption token */
 app.use("/chats", chatRouter)  /* must be tokenized */
 app.use("/myorders", myOrdersRouter) /* must be tokenized */
+app.use("/cart", cartRouter) /* must be tokenized */
 
 /* errorhandlers */
 

@@ -67,7 +67,7 @@ const UserSchema = new Schema(
     },
 
     cart: {
-      type: Object,
+      type: Array,
     },
   },
   {

@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 });
 
 const options = {
-  DB_NAME: process.env.MONGO_CONSUMER_DB,
+  dbName: process.env.MONGO_CONSUMER_DB,
 };
 
 /* socket connections */
@@ -49,7 +49,7 @@ socketConnection(io);
 
 
 try {
-    mongoose.connect(process.env.MONGO_CONNECTION, () => {
+    mongoose.connect(process.env.MONGO_CONNECTION,options, () => {
         console.log("connected to mongo");
       
         try {

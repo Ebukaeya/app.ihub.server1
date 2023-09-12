@@ -9,7 +9,7 @@ const { Schema, model, ObjectId } = pkg;
 const CartSchema = new Schema({});
 
 const ConversationSchema = new Schema({
-  conversationID: { type: String, unique: true } /* manually generated userID+storeID */,
+  conversationID: { type: String, } /* manually generated userID+storeID */,
   business: {
     id: { type: ObjectId },
     NameOfBusiness: { type: String },

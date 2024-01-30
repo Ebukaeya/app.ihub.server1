@@ -13,7 +13,9 @@ import cartRouter from "./endpionts/cart/cartManipulation.js";
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "*" }));
+
+let whitelist = ["http://localhost:3001", "http://localhost:5002", "https://webstore-frontend.vercel.app"];
+app.use(cors({ origin: whitelist}));
 
 /* routes */
 app.use("/consumers", userRouter);
